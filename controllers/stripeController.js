@@ -8,6 +8,9 @@ const subscriptionPrices = new Map([
 //payment
 const paymentCheckout = async (req, res) => {
     try {
+        const subscriptionId = req.body.items[0].id
+        const subscriptionName = subscriptionPrices.get(subscriptionId).name.replace(/\s/g, '')
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
@@ -24,9 +27,9 @@ const paymentCheckout = async (req, res) => {
                     quantity: item.quantity
                 }
             }),
-
-            success_url: `${process.env.CLIENT_URL}/success.html`,
-            cancel_url: `${process.env.CLIENT_URL}/cancel.html`
+            
+            success_url: `${process.env.CLIENT_URL}/success/${subscriptionName}`,
+            cancel_url: `${process.env.CLIENT_URL}/success/${subscriptionName}`
         });
 
         res.status(200).json({ url: session.url })
