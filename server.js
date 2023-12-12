@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/authRoutes");
 const stripeRoutes = require("./routes/stripeRoutes");
-
+const projectsController = require("./controllers/projectsController");
+const workexpController = require("./controllers/workexpController");
 // express app
 const app = express();
 
@@ -27,6 +28,8 @@ app.get("/", (req, res) => {
 // routes
 app.use("/api", authRoutes);
 app.use("/api", stripeRoutes);
+projectsController(app);
+workexpController(app);
 
 // connect to db
 mongoose
